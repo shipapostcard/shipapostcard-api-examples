@@ -4,6 +4,7 @@ Print and mail real postcards to US addresses from your code. These are runnable
 
 - **API reference:** https://shipapostcard.com/developer/docs
 - **OpenAPI 3.1 spec:** https://shipapostcard.com/openapi.json (import it into Postman, Insomnia or your code generator)
+- **Postman collection:** https://documenter.getpostman.com/view/6050671/2sBYHSwzsR (every endpoint with example requests, ready to run)
 - **Base URL:** `https://shipapostcard.com/api/v1`
 
 Senders can be anywhere in the world; **recipients must have a US address**.
