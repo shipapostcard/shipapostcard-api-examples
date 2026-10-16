@@ -25,7 +25,10 @@ foreach ($page['data'] as $postcard) {
 }
 
 [, $postcard] = request('GET', "{$api}/postcards/{$id}");
-echo PHP_EOL."{$id} is {$postcard['status']}".PHP_EOL;
+echo PHP_EOL."{$id} is {$postcard['status']}, expected delivery: ".($postcard['tracking']['expected_delivery_date'] ?? 'not printed yet').PHP_EOL;
+foreach ($postcard['tracking']['events'] as $event) {
+    echo "  {$event['timestamp']}  {$event['event']}".PHP_EOL;
+}
 
 [$status] = request('DELETE', "{$api}/postcards/{$id}");
 echo match ($status) {

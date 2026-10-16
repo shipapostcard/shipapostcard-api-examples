@@ -75,11 +75,46 @@ The [OpenAPI spec](https://shipapostcard.com/openapi.json) is the source of trut
 
 | Request | What it does |
 |---|---|
-| `GET /postcards` | Your workspace's postcards, newest first, 10 per page (`?page=2`). |
+| `GET /postcards` | Your workspace's postcards, newest first, 10 per page (`?page=2`): `current_page`, `data`, `per_page`, `total`, `next_page_url`. |
 | `GET /postcards/{id}` | One postcard. `{id}` is the `sap_order_…` id (the bare number also works). |
 | `DELETE /postcards/{id}` | Cancels it while its status is `pending_batch` or `ready_for_batch`: `204`. Once billing or printing has started: `403`. |
 | `GET /user` | Checks that your key works. |
 | `GET /health` | API status, no key needed. |
+
+`GET /postcards/{id}` (and each item of `GET /postcards`'s `data`) looks like this:
+
+```json
+{
+  "id": "sap_order_1234",
+  "status": "in_transit",
+  "amount": 2.25,
+  "message": "Thanks for your order! Enjoy 20% off your next one with THANKS20.",
+  "recipient_details": {
+    "name": "Jane Doe",
+    "address_line1": "185 Berry St",
+    "city": "San Francisco",
+    "state": "CA",
+    "zip": "94107",
+    "country": "US"
+  },
+  "design_details": {
+    "image_url": "https://example.com/postcard-front.jpg",
+    "size": "4x6",
+    "orientation": "landscape"
+  },
+  "tracking": {
+    "expected_delivery_date": "2026-10-22",
+    "events": [
+      { "event": "sent_to_printer", "timestamp": "2026-10-16 23:59:41" },
+      { "event": "postcard.in_transit", "timestamp": "2026-10-18 09:12:05" }
+    ]
+  },
+  "created_at": "2026-10-16T14:03:11+00:00",
+  "updated_at": "2026-10-18T09:12:05+00:00"
+}
+```
+
+`amount` is in USD, like the create response. `tracking` fills in once the card is sent to the printer.
 
 ### Statuses
 

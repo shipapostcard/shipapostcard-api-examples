@@ -16,7 +16,8 @@ for (const postcard of page.data) {
 }
 
 const postcard = await (await fetch(`${API}/postcards/${id}`, { headers })).json();
-console.log(`\n${id} is ${postcard.status}`);
+console.log(`\n${id} is ${postcard.status}, expected delivery: ${postcard.tracking.expected_delivery_date ?? 'not printed yet'}`);
+for (const event of postcard.tracking.events) console.log(`  ${event.timestamp}  ${event.event}`);
 
 const cancel = await fetch(`${API}/postcards/${id}`, { method: 'DELETE', headers });
 if (cancel.status === 204) console.log('Cancelled.');

@@ -31,7 +31,9 @@ for postcard in page["data"]:
     print(f"  {postcard['id']}  {postcard['status']}  {postcard['recipient_details']['name']}")
 
 _, postcard = request("GET", f"/postcards/{postcard_id}")
-print(f"\n{postcard_id} is {postcard['status']}")
+print(f"\n{postcard_id} is {postcard['status']}, expected delivery: {postcard['tracking']['expected_delivery_date'] or 'not printed yet'}")
+for event in postcard["tracking"]["events"]:
+    print(f"  {event['timestamp']}  {event['event']}")
 
 status, _ = request("DELETE", f"/postcards/{postcard_id}")
 print({204: "Cancelled.", 403: "Too late to cancel: it is already being billed, printed or mailed."}.get(status, f"HTTP {status}"))
